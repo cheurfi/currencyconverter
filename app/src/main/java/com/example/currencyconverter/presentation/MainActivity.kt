@@ -1,7 +1,6 @@
 package com.example.currencyconverter.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +19,8 @@ import kotlin.concurrent.fixedRateTimer
 class MainActivity : BaseActivity() {
 
     private val recyclerView: RecyclerView? by lazy { recycler_view }
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var adapter: CurrencyConverterAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,19 +29,25 @@ class MainActivity : BaseActivity() {
         val repository = CurrencyConverterRepository(CurrencyConverterClient())
         val factory = CurrencyConverterViewModelFactory(repository)
         model = ViewModelProviders.of(this, factory).get(CurrencyConverterViewModel::class.java)
-        model.currencyItems.observe(this, currencyItemsObserver)
 
         timer = fixedRateTimer("timer", false, 0L, 1000) {
-        launch(Dispatchers.IO) {
+            launch(Dispatchers.IO) {
                 model.getOrganisations()
             }
         }
-        recyclerView?.layoutManager = LinearLayoutManager(this)
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerView?.layoutManager = linearLayoutManager
+        adapter = CurrencyConverterAdapter()
+        recyclerView?.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        model.currencyItems.observe(this, currencyItemsObserver)
     }
 
     private val currencyItemsObserver: Observer<CurrencyBase> = Observer {
-        val rates = it.rates
-        recyclerView?.adapter = CurrencyConverterAdapter(rates)
+        adapter.setData(it.rates)
     }
 
     override fun onDestroy() {

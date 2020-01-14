@@ -1,6 +1,5 @@
 package com.example.currencyconverter.presentation
 
-import android.text.Editable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,6 +16,6 @@ class CurrencyConverterViewHolder(private val view: View): RecyclerView.ViewHold
     fun bind(currencyImage: Int?, currencyName: String?, currencyValue: Double?) {
         currencyImage?.let { this.currencyImage.setImageResource(it) }
         this.currencyName.text = currencyName
-        this.currencyValue.text = currencyValue.toString() as Editable
+        this.currencyValue.setText("$currencyValue")
     }
 }

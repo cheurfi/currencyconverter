@@ -40,7 +40,8 @@ class MainActivity : BaseActivity() {
     }
 
     private val currencyItemsObserver: Observer<CurrencyBase> = Observer {
-        recyclerView?.adapter = CurrencyConverterAdapter(it.rates)
+        val rates = it.rates
+        recyclerView?.adapter = CurrencyConverterAdapter(rates)
     }
 
     override fun onDestroy() {

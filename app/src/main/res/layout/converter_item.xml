@@ -33,6 +33,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="1000"/>
 
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

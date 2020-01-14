@@ -32,7 +32,6 @@ class MainActivity : BaseActivity() {
 
         timer = fixedRateTimer("timer", false, 0L, 1000) {
         launch(Dispatchers.IO) {
-            Log.e("making request", "now")
                 model.getOrganisations()
             }
         }

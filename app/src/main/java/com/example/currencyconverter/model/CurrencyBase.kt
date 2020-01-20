@@ -5,11 +5,12 @@ import com.google.gson.annotations.SerializedName
 
 data class CurrencyBase(
 
+	@Expose
 	@SerializedName("base")
 	val base : String,
 	@SerializedName("date")
 	val date : String,
 	@Expose
 	@SerializedName("rates")
-	val rates : List<CurrencyItem>
+	val rates : Map<String, Double>
 )

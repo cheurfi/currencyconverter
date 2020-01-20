@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CurrencyBase(
 
+	@Expose
 	@SerializedName("base")
 	val base : String,
 	@SerializedName("date")

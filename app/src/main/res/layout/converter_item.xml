@@ -7,12 +7,12 @@
 
     <ImageView
         android:id="@+id/currency_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/image_height"
+        android:layout_height="@dimen/image_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:src="@drawable/ic_launcher_background"/>
+        tools:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/currency_title"
@@ -22,7 +22,8 @@
         tools:text="EUR"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/currency_name_margin"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/currency_value"

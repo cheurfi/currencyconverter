@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.R
 import com.example.currencyconverter.factory.CurrencyConverterViewModelFactory
-import com.example.currencyconverter.model.CurrencyBase
+import com.example.currencyconverter.model.Rate
 import com.example.currencyconverter.network.CurrencyConverterClient
 import com.example.currencyconverter.repository.CurrencyConverterRepository
 import com.example.currencyconverter.viewmodel.CurrencyConverterViewModel
@@ -30,10 +30,10 @@ class MainActivity : BaseActivity() {
         val factory = CurrencyConverterViewModelFactory(repository)
         model = ViewModelProviders.of(this, factory).get(CurrencyConverterViewModel::class.java)
 
-        timer = fixedRateTimer("timer", false, 0L, 1000) {
-            launch(Dispatchers.IO) {
-                model.getOrganisations()
-            }
+            timer = fixedRateTimer("timer", false, 0L, 1000) {
+                launch(Dispatchers.IO) {
+                    model.getOrganisations()
+                }
         }
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView?.layoutManager = linearLayoutManager
@@ -46,8 +46,8 @@ class MainActivity : BaseActivity() {
         model.currencyItems.observe(this, currencyItemsObserver)
     }
 
-    private val currencyItemsObserver: Observer<CurrencyBase> = Observer {
-        adapter.setData(it.rates)
+    private val currencyItemsObserver: Observer<List<Rate>> = Observer {
+        adapter.setData(it)
     }
 
     override fun onDestroy() {

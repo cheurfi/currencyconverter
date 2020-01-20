@@ -3,49 +3,54 @@ package com.example.currencyconverter.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.currencyconverter.model.CurrencyBase
 import com.example.currencyconverter.repository.CurrencyConverterRepository
-import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
-import org.powermock.modules.junit4.PowerMockRunner
 import org.powermock.api.mockito.PowerMockito.mock
 import org.powermock.core.classloader.annotations.PrepareForTest
+import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
 @PrepareForTest(CurrencyConverterRepository::class)
 class CurrencyConverterViewModelTest {
 
-    private lateinit var model: CurrencyConverterViewModel
     private val repository = mock(CurrencyConverterRepository::class.java)
+    private val model = CurrencyConverterViewModel(repository)
 
     @Rule
     val rule = InstantTaskExecutorRule()
 
-    @Before
-    fun setup() {
-        model = CurrencyConverterViewModel(repository)
-    }
 
     @Test
-    fun getOrganisations_setsCorrectLiveData() {
-        val rates = mapOf(Pair(RATE_NAME, RATE_VALUE))
+    fun getOrganisations_setsBaseValueAndName() {
+        val rates = mapOf(Pair(BASE, RATE_VALUE))
         runBlocking {
             `when`(repository.getCurrencyItems()).thenReturn(CurrencyBase(BASE, DATE, rates))
             model.getOrganisations()
         }
-        assertEquals(model.currencyItems.value?.base, BASE)
-        assertEquals(model.currencyItems.value?.date, DATE)
-        assertEquals(model.currencyItems.value?.rates?.keys?.first(), RATE_NAME)
-        assertEquals(model.currencyItems.value?.rates?.values?.first(), RATE_VALUE)
+        assertEquals(model.currencyItems.value?.first()?.name, BASE)
+        assertEquals(model.currencyItems.value?.first()?.value, BASE_RATE_VALUE)
+    }
+
+    @Test
+    fun getOrganisations_setsCorrectValues() {
+        val rates = mapOf(Pair(RATE, RATE_VALUE))
+        runBlocking {
+            `when`(repository.getCurrencyItems()).thenReturn(CurrencyBase(BASE, DATE, rates))
+            model.getOrganisations()
+        }
+        assertEquals(model.currencyItems.value?.get(1)?.name, RATE)
+        assertEquals(model.currencyItems.value?.get(1)?.value, RATE_VALUE)
     }
 
     companion object {
-        const val BASE = "Eur"
+        const val BASE = "EUR"
+        const val RATE = "SEK"
         const val DATE = "10/07/2020"
-        const val RATE_NAME = "Euro"
-        const val RATE_VALUE = 1.47
+        const val BASE_RATE_VALUE = 0.0
+        const val RATE_VALUE = 1.7
     }
 }

@@ -8,7 +8,6 @@ import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,16 +21,11 @@ import retrofit2.Response
 @PrepareForTest(CurrencyConverterClient::class, CurrencyBase::class)
 class CurrencyConverterRepositoryTest {
 
-    private lateinit var repository: CurrencyConverterRepository
     private val client = mock(CurrencyConverterClient::class.java)
+    private val repository = CurrencyConverterRepository(client)
 
     @Rule
     val rule = InstantTaskExecutorRule()
-
-    @Before
-    fun setup() {
-        repository = CurrencyConverterRepository(client)
-    }
 
     @Test
     fun getCurrencyItems_withNegativeResponse_returnsNull() {
